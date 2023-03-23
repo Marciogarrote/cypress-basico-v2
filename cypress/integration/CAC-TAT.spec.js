@@ -187,5 +187,11 @@ describe('Central de Atendimento ao Cliente TAT', function(){
     })
 
     //SEÇÃO 9 : Simulando as dimensões de um dispositivo móvel
+    //As Aulas da Seção 9 foram todas no Package.json onde foram criados 
+    //"cy:open:mobile":"cypress open --config viewportWidth=410 viewportHeight=860", que serve para configurar o navegador do Cypress para ficar mobile
+    //test:mobile":"cypress run --config viewportWidth=410,viewportHeight=860" para rodar via viewport sem navegador
+
+
     
+
 })
