@@ -17,7 +17,8 @@ describe('Central de Atendimento ao Cliente TAT', function(){
     })
 
     //SEÇÃO 3 - Digitando em campos e clicando em elementos
-    it('preenche os campos obrigatórios e envia o formulário', function(){
+    
+it('preenche os campos obrigatórios e envia o formulário', function(){
         const longText = 'TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE'
         cy.get('#firstName').type('Marcio')
         cy.get('#lastName').type('Garrote')
@@ -27,7 +28,6 @@ describe('Central de Atendimento ao Cliente TAT', function(){
         cy.contains('button','Enviar').click()
         cy.get('.success').should('be.visible')
     })
-
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function(){
         cy.get('#firstName').type('Marcio')
         cy.get('#lastName').type('Garrote')
@@ -88,7 +88,6 @@ describe('Central de Atendimento ao Cliente TAT', function(){
     })
 
     //SEÇÃO 4 - Selecionando opções em campos de seleção suspensa
-
     it('seleciona um produto (YouTube) por seu texto',function(){
         cy.get('#product').select('YouTube').should('have.value','youtube')
         
