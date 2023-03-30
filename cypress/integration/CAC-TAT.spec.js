@@ -6,8 +6,9 @@
 // https://on.cypress.io/writing-first-test
 
 ///<reference types="Cypress" />
-
+  
 describe('Central de Atendimento ao Cliente TAT', function(){
+    const THREE_SECONDS_IN_MS = 3000
     beforeEach(function(){
         cy.visit('./src/index.html')
     })
@@ -18,7 +19,7 @@ describe('Central de Atendimento ao Cliente TAT', function(){
 
     //SEÇÃO 3 - Digitando em campos e clicando em elementos
     
-it('preenche os campos obrigatórios e envia o formulário', function(){
+   it('preenche os campos obrigatórios e envia o formulário', function(){
         const longText = 'TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE'
         cy.get('#firstName').type('Marcio')
         cy.get('#lastName').type('Garrote')
@@ -191,6 +192,65 @@ it('preenche os campos obrigatórios e envia o formulário', function(){
     //test:mobile":"cypress run --config viewportWidth=410,viewportHeight=860" para rodar via viewport sem navegador
 
 
+    //SEÇÃO 12: Avançando no uso do Cypress
+    it('preenche os campos obrigatórios e envia o formulário', function(){
+        const longText = 'TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE, TESTE'
+
+        cy.clock() //congelar o relogio do navegador
+
+        cy.get('#firstName').type('Marcio')
+        cy.get('#lastName').type('Garrote')
+        cy.get('#email').type('teste@gmail.com')
+        //Quando deseja digitar uma texto longo podemos usar o delay como segundo argumento, para isso criamos uma variavel, passamos essa variaval mais um segundo argumento = 0 
+        cy.get('#open-text-area').type(longText,{delay:0}) 
+        cy.contains('button','Enviar').click()
+        cy.get('.success').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS) // avança no tempo no caso 3 segundos
+
+        cy.get('.success').should('not.be.visible')
+    })
+
+    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function(){
+        cy.clock()
+        cy.get('#firstName').type('Marcio')
+        cy.get('#lastName').type('Garrote')
+        cy.get('#email').type('testegmail.com') 
+        cy.get('#open-text-area').type('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida') 
+        cy.contains('button','Enviar').click()
+        cy.get('.error').should('be.visible')
+        cy.tick(THREE_SECONDS_IN_MS)
+        cy.get('.error').should('not.be.visible')
+    })
+
+    it('mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário',function(){
+        cy.clock()
+        cy.get('#firstName').type('Marcio')
+        cy.get('#lastName').type('Garrote')
+        cy.get('#email').type('teste@gmail.com') 
+        cy.get('#phone-checkbox').check() // alteração do teste de telefone marcado de .click para .check para a semantica
+        cy.get('#open-text-area').type('mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário') 
+        cy.contains('button','Enviar').click()
+        cy.get('.error').should('be.visible')
+        cy.tick(THREE_SECONDS_IN_MS)
+        cy.get('.error').should('not.be.visible')
+    })
+
+    it('chamado exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios',function(){
+        cy.clock()
+        cy.contains('button','Enviar').click()
+        cy.get('.error').should('be.visible') 
+        cy.tick(THREE_SECONDS_IN_MS)
+        cy.get('.error').should('not.be.visible')
+    })
+
+    it('envia o formulário com sucesso usando um comando customizado',function(){
+        cy.clock()
+        cy.fillMandatoryFieldsAndSubmit()
+        cy.get('.success').should('be.visible')
+        cy.tick(THREE_SECONDS_IN_MS)
+        cy.get('.success').should('not.be.visible')
+    })
     
 
 })
