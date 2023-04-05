@@ -292,7 +292,7 @@ describe('Central de Atendimento ao Cliente TAT', function(){
         //Teste que estou fazendo para vez se é possivel testar botão
       it('teste Cypress._.repeat', function(){
         const test = Cypress._.repeat(cy.get('#phone-checkbox').check(), 20)
-      })
+      }) 
 
         //Com o Cypress da para fazer requisição a nivel de rede, nesse caso abaixo fazemos um GET para esse URL, depois mandamos um should para fazer a verificação
         //e dentro do should passamos a function de callback e essa function recebe a resposta da requisição , assim desistrtuturamos o status, statusText e o body 
