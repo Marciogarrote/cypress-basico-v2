@@ -251,6 +251,72 @@ describe('Central de Atendimento ao Cliente TAT', function(){
         cy.tick(THREE_SECONDS_IN_MS)
         cy.get('.success').should('not.be.visible')
     })
-    
 
+    //Testando loadsh
+    Cypress._.times(6, function(){
+        it('campo telefone continua vazio quando preenchido com valor não-numérico', function(){
+            cy.get('#phone')
+                .type('abcdefghij')
+                .should('have.value', '')
+        })
+    })
+    
+    //Invoke
+    //Show vai mostrar o objeto
+    //Hide esconde o objeto
+    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', function() {
+        cy.get('.success')
+          .should('not.be.visible')
+          .invoke('show')
+          .should('be.visible')
+          .and('contain', 'Mensagem enviada com sucesso.')
+          .invoke('hide')
+          .should('not.be.visible')
+        cy.get('.error')
+          .should('not.be.visible')
+          .invoke('show')
+          .should('be.visible')
+          .and('contain', 'Valide os campos obrigatórios!')
+          .invoke('hide')
+          .should('not.be.visible')
+      })
+
+      it('preenche a area de texto usando o comando invoke', function(){
+        const longText = Cypress._.repeat('0123456789', 20)
+
+        cy.get('#open-text-area')
+            .invoke('val', longText)
+            .should('have.value', longText)
+      })
+
+        //Teste que estou fazendo para vez se é possivel testar botão
+      it('teste Cypress._.repeat', function(){
+        const test = Cypress._.repeat(cy.get('#phone-checkbox').check(), 20)
+      })
+
+        //Com o Cypress da para fazer requisição a nivel de rede, nesse caso abaixo fazemos um GET para esse URL, depois mandamos um should para fazer a verificação
+        //e dentro do should passamos a function de callback e essa function recebe a resposta da requisição , assim desistrtuturamos o status, statusText e o body 
+      it('faz uma requisição HTTP',function(){
+        cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+            .should(function(response){
+            //Desistruturação de objeto função do JS
+            //Para desistruturar abrimos o const
+            const {status, statusText, body} = response
+            expect(status).to.equal (200)
+            expect(statusText).to.equal('OK')
+            expect(body).to.include('CAC TAT')
+            })
+      })
+
+      it('encontre o gato escondido', function(){
+        //Desmarcando um DisplayNone
+        cy.get('#cat')
+            .invoke('show')
+            .should('be.visible')
+        //Alterando o Texto do TITULO e SUBTITULO
+        cy.get('#title')
+            .invoke('text', 'CAT TAT')
+        cy.get('#subtitle')
+            .invoke('text', 'Eu estou aprendendo Cypress 💀')
+      })
 })
